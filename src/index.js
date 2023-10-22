@@ -1,6 +1,6 @@
-import axios from "axios";
-axios.defaults.headers.common["x-api-key"] = "live_PhXg6m1e89ZbnG7FDR15hAjab85V5uL6D1VdPGujOW26oEg0APokw6KuJdQZKsWA";
 import { fetchBreeds, fetchCatByBreed } from './cat-api.js';
+import SlimSelect from 'slim-select'
+import Notiflix from 'notiflix';
 
 const selectors = {
     breeds: document.querySelector(".breed-select"),
@@ -9,34 +9,73 @@ const selectors = {
     description: document.querySelector(".cat-info")
 }
 
+
+selectors.loader.classList.add('visible');
+selectors.breeds.classList.add('hidden'); 
+selectors.error.classList.add('visible');
+
 fetchBreeds()
     .then(data => {
-       data.forEach(breed => {
+        selectors.loader.classList.remove('visible');
+        selectors.breeds.classList.remove('hidden');
+        selectors.error.classList.remove('visible');
+        data.forEach(breed => {
             const option = document.createElement('option');
             option.value = breed.id;
             option.textContent = breed.name; 
-           selectors.breeds.appendChild(option);
-        });
+            selectors.breeds.appendChild(option);
+// //             new SlimSelect({
+// //   select: selectors.breeds,
+// //   settings: {
+// //     placeholderText: 'Select the breed',
+// //   }
+// // })
+//         });
     })
-    .catch(err => console.log(`${selectors.error}`));
-   
+    .catch(err => {
+        selectors.error.classList.add('visible');
+        Notiflix.Notify.failure('Oops! Something went wrong! Try reloading the page!', {timeout:5000, userIcon:false});
+    });
+
 selectors.breeds.addEventListener('change', selectedCat);
+
 function selectedCat(evt) {
+    selectors.loader.classList.add('visible');
+    selectors.description.classList.add('hidden');
     fetchCatByBreed(evt.target.value)
         .then(data => {
-        selectors.description.innerHTML = createMarcup(data);
+            selectors.loader.classList.remove('visible'); 
+            selectors.description.classList.remove('hidden'); 
+            selectors.description.innerHTML = createMarcup(data);
         })
-        .catch(err => console.log(`${selectors.error}`));
+        .catch(err => {
+            selectors.error.classList.add('visible');
+            Notiflix.Notify.failure('Oops! Something went wrong! Try reloading the page!', {timeout:5000, userIcon:false});
+        });
 }
 
 function createMarcup(arr) {
-    return arr.map(({name,vetstreet_url,temperament,description}) => `
-      <img src="${vetstreet_url}" alt="${name}"/>
-      <h2 class="name">${name}</h2>
-      <p class="description">${description}</p>
-      <p class="temperament">Temperament:${temperament}</p>
-   `).join('')
+    return arr.map(({ url, id, breeds }) => `
+    <li class="item">
+     <img src="${url}" alt="${id}" class="image"/>
+     <div class="text-conteiner"/>
+     <h2 class="name">${breeds[0].name}</h2>
+    <p class="description">${breeds[0].description}</p>
+     <p><span class="temperament">Temperament:</span>${breeds[0].temperament}</p>
+     <div/>
+     </li>
+   `).join('');
 }
+
+
+
+
+
+
+
+
+
+
 
 
 
