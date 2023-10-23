@@ -1,5 +1,6 @@
 import { fetchBreeds, fetchCatByBreed } from './cat-api.js';
 import SlimSelect from 'slim-select'
+import "slim-select/dist/slimselect.css"
 import Notiflix from 'notiflix';
 
 const selectors = {
@@ -9,14 +10,13 @@ const selectors = {
     description: document.querySelector(".cat-info")
 }
 
-
-selectors.loader.classList.add('visible');
+// selectors.loader.classList.add('visible');
 selectors.breeds.classList.add('hidden'); 
 selectors.error.classList.add('visible');
 
 fetchBreeds()
     .then(data => {
-        selectors.loader.classList.remove('visible');
+        // selectors.loader.classList.remove('visible');
         selectors.breeds.classList.remove('hidden');
         selectors.error.classList.remove('visible');
         data.forEach(breed => {
@@ -24,18 +24,13 @@ fetchBreeds()
             option.value = breed.id;
             option.textContent = breed.name; 
             selectors.breeds.appendChild(option);
-// //             new SlimSelect({
-// //   select: selectors.breeds,
-// //   settings: {
-// //     placeholderText: 'Select the breed',
-// //   }
-// // })
-//         });
+            
+         });
     })
     .catch(err => {
         selectors.error.classList.add('visible');
         Notiflix.Notify.failure('Oops! Something went wrong! Try reloading the page!', {timeout:5000, userIcon:false});
-    });
+    }).finally(()=>selectors.loader.classList.add('hidden'));
 
 selectors.breeds.addEventListener('change', selectedCat);
 
