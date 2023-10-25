@@ -10,13 +10,17 @@ const selectors = {
     description: document.querySelector(".cat-info")
 }
 
-// selectors.loader.classList.add('visible');
 selectors.breeds.classList.add('hidden'); 
 selectors.error.classList.add('visible');
+new SlimSelect({
+  select: selectors.breeds,
+  settings: {
+    placeholderText: 'Select a cat breed',
+  }
+});
 
 fetchBreeds()
     .then(data => {
-        // selectors.loader.classList.remove('visible');
         selectors.breeds.classList.remove('hidden');
         selectors.error.classList.remove('visible');
         data.forEach(breed => {
