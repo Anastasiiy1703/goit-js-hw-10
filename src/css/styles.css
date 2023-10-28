@@ -50,3 +50,7 @@ animation: rotation 1s linear infinite;
          transform: rotate(360deg);
      }
  }
+
+ .breed-select{
+display: block;
+ }
