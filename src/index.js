@@ -9,7 +9,7 @@ const selectors = {
   description: document.querySelector('.cat-info'),
 };
 selectors.breeds.classList.add('hidden');
-selectors.error.classList.add('visible');
+selectors.error.classList.add('hidden');
 selectors.breeds.style.display = 'block';
 fetchBreeds()
   .then(data => {
@@ -34,12 +34,14 @@ fetchBreeds()
       'Oops! Something went wrong! Try reloading the page!',
       { timeout: 5000, userIcon: false }
     );
+  
   })
   .finally(() => selectors.loader.classList.add('hidden'));
 function selectedCat(evt) {
   selectors.loader.classList.add('visible');
   selectors.description.classList.add('hidden');
-  fetchCatByBreed(evt.value)
+  const breedId = evt.target.value;
+  fetchCatByBreed(breedId)
     .then(data => {
       selectors.loader.classList.remove('visible');
       selectors.description.classList.remove('hidden');
