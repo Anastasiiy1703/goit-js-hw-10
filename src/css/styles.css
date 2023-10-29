@@ -1,11 +1,3 @@
-.visible{
-    display: none;
-}
-
-.hidden {
-    visibility: hidden;
-}
-
 .item{
     display: flex;
     flex-direction: row;
@@ -37,9 +29,10 @@ height: 48px;
 border: 5px solid black;
 border-bottom-color: #FF3D00;
 border-radius: 50%;
-display: inline-block;
 box-sizing: border-box;
 animation: rotation 1s linear infinite;
+visibility: hidden;
+
 }
  @keyframes rotation {
      0% {
@@ -49,4 +42,12 @@ animation: rotation 1s linear infinite;
      100% {
          transform: rotate(360deg);
      }
+ }
+
+ .visible {
+visibility: visible;
+ }
+
+ .hidden {
+visibility: hidden;
  }
