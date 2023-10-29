@@ -23,7 +23,7 @@ fetchBreeds()
     new SlimSelect({
       select: selectors.breeds,
       settings: {
-        placeholderText: 'Custom Placeholder Text',
+        placeholderText: 'Choose a breed',
       },
     });
     selectors.breeds.addEventListener('change', selectedCat);
